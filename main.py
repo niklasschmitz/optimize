@@ -5,7 +5,6 @@ import torchvision.datasets as dset
 import torchvision.transforms as transforms
 
 
-
 def main(args):
     root = 'data'
     if not os.path.exists(root):
@@ -23,3 +22,10 @@ def main(args):
         dataset=test_set,
         batch_size=args.batch_size,
         shuffle=False)
+
+    # a simple multilayer perceptron for demonstration purposes
+    model = nn.Sequential(
+        nn.Linear(28 * 28, 256), nn.ReLU(),
+        nn.Linear(256, 256), nn.ReLU(),
+        nn.Linear(256, 10)
+    )
