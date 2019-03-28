@@ -69,11 +69,11 @@ if __name__ == '__main__':
     parser.add_argument('--tau', default=0.9,
         help='Decaying parameter')
     parser.add_argument('--rho', type=float, default=0.9,
-        help='momentum')
+        help='Momentum')
     parser.add_argument('--beta1', type=float, default=0.9,
-        help='first order decaying parameter')
+        help='First order decaying parameter')
     parser.add_argument('--beta2', type=float, default=0.999,
-        help='second order decaying parameter')
+        help='Fecond order decaying parameter')
     parser.add_argument('--output', type=str, default=None,
         help='Output file to save training loss and accuracy.')
     args = parser.parse_args()
