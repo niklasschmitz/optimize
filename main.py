@@ -56,8 +56,6 @@ def main(args):
 if __name__ == '__main__':
     # fmt: off
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument('--dataset', type=str, default="MNIST",
-        help='Which dataset to use: MNIST or KMNIST')
     parser.add_argument('--optimizer', type=str, default="adam",
         help='Name of the optimizer: sgd, momentumsgd, adam, adagrad, rmsprop')
     parser.add_argument('--learning_rate', type=float, default=1e-4,
