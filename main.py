@@ -1,8 +1,10 @@
 import os
 import torch
 import torch.nn as nn
+from torch.autograd import Variable
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
+import torch.optim as optim
 
 
 def main(args):
@@ -29,3 +31,21 @@ def main(args):
         nn.Linear(256, 256), nn.ReLU(),
         nn.Linear(256, 10)
     )
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=1)
+
+    # training
+    losses = []
+    for epoch in range(20):
+        for batch_idx, (x, target) in enumerate(train_loader):
+            optimizer.zero_grad()
+            x, target = Variable(x), Variable(target)
+            out = model(x)
+            loss = criterion(out, target)
+            loss.backward()
+            optimizer.step()
+
+
+if __name__ == '__main__':
+    main(1)
