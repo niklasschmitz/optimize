@@ -8,8 +8,13 @@ import torch.optim as optim
 import argparse
 
 
+class Flatten(nn.Module):
+    def forward(self, input):
+        return input.view(-1, 28 * 28)
+
+
 def main(args):
-    root = 'data'
+    root = "data"
     if not os.path.exists(root):
         os.mkdir(root)
 
@@ -18,19 +23,20 @@ def main(args):
     test_set = dset.MNIST(root=root, train=False, transform=trans, download=True)
 
     train_loader = torch.utils.data.DataLoader(
-        dataset=train_set,
-        batch_size=args.batch_size,
-        shuffle=True)
+        dataset=train_set, batch_size=args.batch_size, shuffle=True
+    )
     test_loader = torch.utils.data.DataLoader(
-        dataset=test_set,
-        batch_size=args.batch_size,
-        shuffle=False)
+        dataset=test_set, batch_size=args.batch_size, shuffle=False
+    )
 
     # a simple multilayer perceptron for demonstration purposes
     model = nn.Sequential(
-        nn.Linear(28 * 28, 256), nn.ReLU(),
-        nn.Linear(256, 256), nn.ReLU(),
-        nn.Linear(256, 10)
+        Flatten(),
+        nn.Linear(28 * 28, 256),
+        nn.ReLU(),
+        nn.Linear(256, 256),
+        nn.ReLU(),
+        nn.Linear(256, 10),
     )
 
     criterion = nn.CrossEntropyLoss()
@@ -53,7 +59,7 @@ def main(args):
         print(avg_loss)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # fmt: off
     parser = argparse.ArgumentParser(description="")
     parser.add_argument('--optimizer', type=str, default="adam",
