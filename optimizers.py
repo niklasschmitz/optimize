@@ -114,5 +114,5 @@ def create_optimizer(args):
         return RMSPropOptimizer(args)
     elif args.optimizer == "adam":
         return AdamOptimizer(args)
-    else
+    else:
         raise ValueError("invalid optimizer")
