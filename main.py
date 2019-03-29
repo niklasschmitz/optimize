@@ -6,7 +6,7 @@ import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torch.optim as optim
 import argparse
-
+from optimizers import create_optimizer
 
 class Flatten(nn.Module):
     def forward(self, input):
