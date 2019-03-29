@@ -42,10 +42,11 @@ def main(args):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=1)
 
-    # training
+    print("Training model...")
     losses = []
     for epoch in range(args.training_epochs):
         avg_loss = 0
+        correct = 0
         for batch_idx, (x, target) in enumerate(train_loader):
             optimizer.zero_grad()
             x, target = Variable(x), Variable(target)
@@ -53,10 +54,30 @@ def main(args):
             loss = criterion(out, target)
             loss.backward()
             optimizer.step()
+            _, prediction = torch.max(out.data, 1)
+            correct += (prediction == target.data).sum().item()
             avg_loss += loss.item()
-        avg_loss /= len(train_loader)
+        avg_loss /= len(train_loader.dataset)
+        accuracy = correct / len(train_loader.dataset)
+
         losses.append(avg_loss)
-        print(avg_loss)
+        print(
+            "Epoch=%-3d" % (epoch + 1)
+            + " loss={:.8f}   accuracy={:.4f}".format(avg_loss, accuracy)
+        )
+
+    print("Testing on test set")
+    avg_loss = 0
+    correct = 0
+    for batch_idx, (x, target) in enumerate(test_loader):
+        out = model(x)
+        loss = criterion(out, target)
+        _, prediction = torch.max(out.data, 1)
+        correct += (prediction == target.data).sum().item()
+        avg_loss += loss.item()
+    avg_loss /= len(test_loader.dataset)
+    accuracy = correct / len(test_loader.dataset)
+    print("Test:  loss={:.8f}  accuracy={:.4f}".format(avg_loss, accuracy))
 
 
 if __name__ == "__main__":
