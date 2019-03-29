@@ -32,6 +32,22 @@ class MomentumSGDOptimizer(Optimizer):
             p.grad = self.learning_rate * self.m[i]
 
 
+class AdagradOptimizer(Optimizer):
+    def __init__(self, args):
+        self.delta = args.delta
+        self.learning_rate = args.learning_rate
+        self.r = None
+
+    def update(self, model):
+        if self.r is None:
+            self.r = [torch.zeros(p.size()) for p in model.parameters()]
+
+        for i, p in enumerate(model.parameters()):
+            grad = p.grad
+            self.r[i] += grad * grad
+            p.grad = (self.learning_rate / (self.delta + torch.sqrt(self.r[i]))) * grad
+
+
 def create_optimizer(args):
     if args.optimizer == "sgd":
         return SGDOptimizer(args)
