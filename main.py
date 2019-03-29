@@ -40,7 +40,8 @@ def main(args):
     )
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=1)
+    base_optimizer = optim.SGD(model.parameters(), lr=1)
+    optimizer = create_optimizer(args)
 
     print("Training model...")
     losses = []
@@ -48,12 +49,13 @@ def main(args):
         avg_loss = 0
         correct = 0
         for batch_idx, (x, target) in enumerate(train_loader):
-            optimizer.zero_grad()
+            base_optimizer.zero_grad()
             x, target = Variable(x), Variable(target)
             out = model(x)
             loss = criterion(out, target)
             loss.backward()
-            optimizer.step()
+            optimizer.update(model)
+            base_optimizer.step()
             _, prediction = torch.max(out.data, 1)
             correct += (prediction == target.data).sum().item()
             avg_loss += loss.item()
